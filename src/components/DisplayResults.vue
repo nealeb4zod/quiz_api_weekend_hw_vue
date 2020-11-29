@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h1>You scored {{ score }} out of 10!</h1>
+      <h1>{{ player.name }} you scored {{ score }} out of 10!</h1>
     </div>
     <div>
       <p>Here are your results:</p>
@@ -20,7 +20,6 @@
             'correct-answers': answer.selectedAnswer.correct,
             'wrong-answers': !answer.selectedAnswer.correct,
           }"
-          class=""
         >
           <span>Your answer: </span>
           <span v-html="answer.selectedAnswer.answer"></span>
@@ -36,7 +35,7 @@
 <script>
 export default {
   name: "DisplayResults",
-  props: ["answeredQuestions"],
+  props: ["answeredQuestions", "player"],
   mounted() {},
   computed: {
     score() {

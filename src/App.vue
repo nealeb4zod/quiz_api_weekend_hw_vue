@@ -1,41 +1,46 @@
 <template>
   <div id="main-container">
-    <get-name v-if="!this.player.name"></get-name>
-    <get-category
-      v-if="!this.selectedCategory && this.player.name"
-      :categories="categories"
-    ></get-category>
-    <get-difficulty
-      v-if="
-        !this.selectedDifficulty && this.selectedCategory && this.player.name
-      "
-      :difficulties="difficulties"
-    ></get-difficulty>
-    <display-questions
-      v-if="this.questions.length > 0 && this.answeredQuestions.length != 10"
-      :questions="questions"
-      :lastAnsweredQuestion="lastAnsweredQuestion"
-    ></display-questions>
-    <div
-      class="input-box"
-      v-if="
-        this.player.name &&
-          this.selectedDifficulty &&
-          this.selectedCategory &&
-          this.questions.length === 0
-      "
-    >
-      <p>Hello {{ this.player.name }}!</p>
-      <p>Difficulty: {{ this.selectedDifficulty | capitalise }}</p>
-      <p>Category: {{ this.selectedCategory.name }}</p>
-      <button @click="generateQuestions(selectedCategory, selectedDifficulty)">
-        Generate Quiz
-      </button>
-    </div>
-    <display-results
-      v-if="this.answeredQuestions.length === 10"
-      :answeredQuestions="answeredQuestions"
-    ></display-results>
+    <transition name="component-fade" mode="out-in">
+      <get-name v-if="!this.player.name"></get-name>
+      <get-category
+        v-if="!this.selectedCategory && this.player.name"
+        :categories="categories"
+      ></get-category>
+      <get-difficulty
+        v-if="
+          !this.selectedDifficulty && this.selectedCategory && this.player.name
+        "
+        :difficulties="difficulties"
+      ></get-difficulty>
+      <display-questions
+        v-if="this.questions.length > 0 && this.answeredQuestions.length != 10"
+        :questions="questions"
+        :lastAnsweredQuestion="lastAnsweredQuestion"
+      ></display-questions>
+      <div
+        class="input-box"
+        v-if="
+          this.player.name &&
+            this.selectedDifficulty &&
+            this.selectedCategory &&
+            this.questions.length === 0
+        "
+      >
+        <p>Hello {{ this.player.name }}!</p>
+        <p>Difficulty: {{ this.selectedDifficulty | capitalise }}</p>
+        <p>Category: {{ this.selectedCategory.name }}</p>
+        <button
+          @click="generateQuestions(selectedCategory, selectedDifficulty)"
+        >
+          Generate Quiz
+        </button>
+      </div>
+      <display-results
+        v-if="this.answeredQuestions.length === 10"
+        :answeredQuestions="answeredQuestions"
+        :player="player"
+      ></display-results>
+    </transition>
   </div>
 </template>
 
@@ -126,16 +131,22 @@ export default {
 </script>
 
 <style>
+html,
+body {
+  height: 100%;
+}
 body {
   font-family: "Courier New", Courier, monospace;
   background: rgb(199, 232, 243);
 }
 #main-container {
+  margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .input-box {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 25px;
   background: lightcyan;
   text-align: center;
@@ -144,6 +155,8 @@ body {
   flex-flow: column;
   align-items: center;
   justify-content: center;
+  min-width: 300px;
+  min-height: 300px;
 }
 .flex-form {
   display: flex;
@@ -171,5 +184,14 @@ input {
 
 #answers-box {
   margin: 10px;
+}
+
+.component-fade-enter-active,
+.component-fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.component-fade-enter, .component-fade-leave-to
+/* .component-fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
