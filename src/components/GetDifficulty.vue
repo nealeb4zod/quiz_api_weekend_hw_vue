@@ -1,6 +1,7 @@
 <template>
   <div class="input-box" id="select-difficulty">
     <form v-on:submit.prevent="updateSelectedDifficulty" class="flex-form">
+      <h2>One more thing {{ player.name }} - please select a diffculty.</h2>
       <label for="difficulties">Difficulties: </label>
       <select
         name="difficulties"
@@ -23,7 +24,7 @@
 import { eventBus } from "../main.js";
 export default {
   name: "get-difficulties",
-  props: ["difficulties"],
+  props: ["difficulties", "player"],
   data() {
     return {
       selectedDifficulty: null,

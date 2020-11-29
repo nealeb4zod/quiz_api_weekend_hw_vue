@@ -5,12 +5,14 @@
       <get-category
         v-if="!this.selectedCategory && this.player.name"
         :categories="categories"
+        :player="player"
       ></get-category>
       <get-difficulty
         v-if="
           !this.selectedDifficulty && this.selectedCategory && this.player.name
         "
         :difficulties="difficulties"
+        :player="player"
       ></get-difficulty>
       <display-questions
         v-if="this.questions.length > 0 && this.answeredQuestions.length != 10"
@@ -26,9 +28,10 @@
             this.questions.length === 0
         "
       >
-        <p>Hello {{ this.player.name }}!</p>
-        <p>Difficulty: {{ this.selectedDifficulty | capitalise }}</p>
-        <p>Category: {{ this.selectedCategory.name }}</p>
+        <h2>
+          You have selected "{{ this.selectedDifficulty }}" questions from the
+          category "{{ this.selectedCategory.name }}".
+        </h2>
         <button
           @click="generateQuestions(selectedCategory, selectedDifficulty)"
         >
@@ -58,18 +61,12 @@ export default {
   name: "app",
   data() {
     return {
-      // selectedCategory: { name: "", id: "9" },
-      // selectedDifficulty: "easy",
-      // questions: [],
-      // categories: [],
-      // difficulties: ["easy", "medium", "hard"],
-      // player: { name: "Neale", score: 0 },
       selectedCategory: null,
       selectedDifficulty: null,
       questions: [],
       categories: [],
       difficulties: ["easy", "medium", "hard"],
-      player: { name: null, score: 0 },
+      player: { name: null },
       answeredQuestions: [],
     };
   },
@@ -108,14 +105,6 @@ export default {
       this.answeredQuestions.push(question);
     });
   },
-  components: {
-    "get-name": GetNameVue,
-    "get-category": GetCategoryVue,
-    "get-difficulty": GetDifficultyVue,
-    "display-questions": DisplayQuestionsVue,
-    "display-results": DisplayResultsVue,
-    "individual-question": IndividualQuestionVue,
-  },
   computed: {
     lastAnsweredQuestion() {
       let lastAnsweredQuestion = 0;
@@ -127,16 +116,20 @@ export default {
       return lastAnsweredQuestion;
     },
   },
+  components: {
+    "get-name": GetNameVue,
+    "get-category": GetCategoryVue,
+    "get-difficulty": GetDifficultyVue,
+    "display-questions": DisplayQuestionsVue,
+    "display-results": DisplayResultsVue,
+    "individual-question": IndividualQuestionVue,
+  },
 };
 </script>
 
 <style>
-html,
 body {
-  height: 100%;
-}
-body {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Itim", cursive;
   background: rgb(199, 232, 243);
 }
 #main-container {

@@ -1,9 +1,10 @@
 <template>
   <div class="input-box" id="get-name">
     <form v-on:submit.prevent="updatePlayerName" class="flex-form">
-      <label for="name">Enter your name: </label>
+      <h1>Welcome to Trivia Quiz.</h1>
+      <label for="name">Please enter your name: </label>
       <input type="text" name="name" id="name" v-model="player.name" />
-      <input type="submit" value="Confirm Name" />
+      <input type="submit" value="Continue..." />
     </form>
   </div>
 </template>
