@@ -1,6 +1,6 @@
 <template>
-  <div id="select-difficulty">
-    <form v-on:submit.prevent="updateSelectedDifficulty">
+  <div class="input-box" id="select-difficulty">
+    <form v-on:submit.prevent="updateSelectedDifficulty" class="flex-form">
       <label for="difficulties">Difficulties: </label>
       <select
         name="difficulties"

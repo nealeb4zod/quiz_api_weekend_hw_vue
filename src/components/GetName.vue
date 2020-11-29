@@ -1,9 +1,9 @@
 <template>
-  <div id="get-name">
-    <form v-on:submit.prevent="updatePlayerName">
+  <div class="input-box" id="get-name">
+    <form v-on:submit.prevent="updatePlayerName" class="flex-form">
       <label for="name">Enter your name: </label>
       <input type="text" name="name" id="name" v-model="player.name" />
-      <input type="submit" value="Add Name" />
+      <input type="submit" value="Confirm Name" />
     </form>
   </div>
 </template>

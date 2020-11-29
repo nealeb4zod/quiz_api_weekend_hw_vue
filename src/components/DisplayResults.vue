@@ -5,17 +5,30 @@
     </div>
     <div>
       <p>Here are your results:</p>
-      <p v-for="answer in this.answeredQuestions" :key="answer.questionNumber">
+      <div
+        class="input-box"
+        id="answers-box"
+        v-for="(answer, index) in this.answeredQuestions"
+        :key="index"
+      >
         <span>Question {{ answer.questionNumber }}.</span>
         <br />
         <span v-html="answer.question"></span>
         <br />
-        <span>Your answer: </span>
-        <span v-html="answer.selectedAnswer.answer"></span>
-        <br />
-        <span>Correct answer: </span>
-        <span v-html="answer.correct_answer"></span>
-      </p>
+        <div
+          :class="{
+            'correct-answers': answer.selectedAnswer.correct,
+            'wrong-answers': !answer.selectedAnswer.correct,
+          }"
+          class=""
+        >
+          <span>Your answer: </span>
+          <span v-html="answer.selectedAnswer.answer"></span>
+          <br />
+          <span>Correct answer: </span>
+          <span v-html="answer.correct_answer"></span>
+        </div>
+      </div>
     </div>
   </div>
 </template>

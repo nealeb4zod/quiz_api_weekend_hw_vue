@@ -1,5 +1,8 @@
 <template>
-  <div v-if="lastAnsweredQuestion + 1 === this.questionNumber">
+  <div
+    class="input-box"
+    v-if="lastAnsweredQuestion + 1 === this.questionNumber"
+  >
     <div>
       <h2>Question {{ this.questionNumber }}.</h2>
       <h3 v-html="question.question"></h3>

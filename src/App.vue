@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="main-container">
     <get-name v-if="!this.player.name"></get-name>
     <get-category
       v-if="!this.selectedCategory && this.player.name"
@@ -17,6 +17,7 @@
       :lastAnsweredQuestion="lastAnsweredQuestion"
     ></display-questions>
     <div
+      class="input-box"
       v-if="
         this.player.name &&
           this.selectedDifficulty &&
@@ -127,5 +128,48 @@ export default {
 <style>
 body {
   font-family: "Courier New", Courier, monospace;
+  background: rgb(199, 232, 243);
+}
+#main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.input-box {
+  padding: 25px;
+  background: lightcyan;
+  text-align: center;
+  border-radius: 15px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+}
+.flex-form {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  margin: auto;
+}
+flex-form > label,
+select,
+input {
+  margin: 10px;
+}
+.correct-answers {
+  border: 3px solid green;
+  border-radius: 5px;
+  padding: 10px;
+}
+.wrong-answers {
+  border: 3px solid red;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+#answers-box {
+  margin: 10px;
 }
 </style>

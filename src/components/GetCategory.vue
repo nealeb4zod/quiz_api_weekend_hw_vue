@@ -1,6 +1,6 @@
 <template>
-  <div id="category-form">
-    <form v-on:submit.prevent="updateSelectedCategory">
+  <div class="input-box" id="category-form">
+    <form v-on:submit.prevent="updateSelectedCategory" class="flex-form">
       <label for="categories">Category: </label>
       <select name="categories" id="categories" v-model="selectedCategory">
         <option
