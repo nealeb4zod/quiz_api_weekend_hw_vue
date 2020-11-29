@@ -1,5 +1,7 @@
 # weekend_hw_vue
 
+https://quiz-vue-homework.herokuapp.com/
+
 ## Project setup
 ```
 npm install
