@@ -8,14 +8,38 @@
       <h3 v-html="question.question"></h3>
     </div>
     <div>
-      <form v-for="(answer, index) in answers" :key="index">
+      <form>
         <input
           type="radio"
-          id="index"
-          :value="answer"
+          id="answer0"
+          :value="answers[0]"
           v-model="selectedAnswer"
         />
-        <label for="index" v-html="answer.answer"></label>
+        <label for="answer0" v-html="answers[0].answer"></label>
+        <br />
+        <input
+          type="radio"
+          id="answer1"
+          :value="answers[1]"
+          v-model="selectedAnswer"
+        />
+        <label for="answer1" v-html="answers[1].answer"></label>
+        <br />
+        <input
+          type="radio"
+          id="answer2"
+          :value="answers[2]"
+          v-model="selectedAnswer"
+        />
+        <label for="answer2" v-html="answers[2].answer"></label>
+        <br />
+        <input
+          type="radio"
+          id="answer3"
+          :value="answers[3]"
+          v-model="selectedAnswer"
+        />
+        <label for="answer3" v-html="answers[3].answer"></label>
         <br />
       </form>
       <button v-if="selectedAnswer" @click="confirmAnswer">
