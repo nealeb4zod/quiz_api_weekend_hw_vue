@@ -1,11 +1,10 @@
 <template>
-  <div
-    class="input-box"
-    v-if="lastAnsweredQuestion + 1 === this.questionNumber"
-  >
+  <div class="input-box" v-if="currentQuestion === question.questionNumber">
     <div>
-      <h2>Question {{ this.questionNumber }}.</h2>
+      <h2>Question {{ question.questionNumber }}.</h2>
+      <br />
       <h3 v-html="question.question"></h3>
+      <br />
     </div>
     <div>
       <form>
@@ -50,18 +49,17 @@
 </template>
 
 <script>
-import { eventBus } from "../main.js";
+import { eventBus } from '../main.js';
 
 export default {
-  name: "individual-question",
+  name: 'individual-question',
   data() {
     return {
       individualQuestion: this.question,
-      questionNumber: this.questionIndex + 1,
       selectedAnswer: null,
     };
   },
-  props: ["question", "questionIndex", "lastAnsweredQuestion"],
+  props: ['question', 'currentQuestion'],
   computed: {
     correctAnswer() {
       const correctAnswer = {
@@ -104,8 +102,7 @@ export default {
   methods: {
     confirmAnswer() {
       this.individualQuestion.selectedAnswer = this.selectedAnswer;
-      this.individualQuestion.questionNumber = this.questionNumber;
-      eventBus.$emit("answered-question", this.individualQuestion);
+      eventBus.$emit('answered-question', this.individualQuestion);
     },
   },
 };

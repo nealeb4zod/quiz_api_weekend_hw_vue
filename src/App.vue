@@ -14,30 +14,22 @@
         :difficulties="difficulties"
         :player="player"
       ></get-difficulty>
-      <display-questions
-        v-if="this.questions.length > 0 && this.answeredQuestions.length != 10"
-        :questions="questions"
-        :lastAnsweredQuestion="lastAnsweredQuestion"
-      ></display-questions>
-      <div
-        class="input-box"
+      <generate-questions
         v-if="
           this.player.name &&
             this.selectedDifficulty &&
             this.selectedCategory &&
             this.questions.length === 0
         "
-      >
-        <h2>
-          You have selected "{{ this.selectedDifficulty }}" questions from the
-          category "{{ this.selectedCategory.name }}".
-        </h2>
-        <button
-          @click="generateQuestions(selectedCategory, selectedDifficulty)"
-        >
-          Generate Quiz
-        </button>
-      </div>
+        :selectedCategory="this.selectedCategory"
+        :selectedDifficulty="this.selectedDifficulty"
+      ></generate-questions>
+      <display-questions
+        v-if="this.questions.length > 0 && this.answeredQuestions.length != 10"
+        :questions="questions"
+        :currentQuestion="currentQuestion"
+        :answeredQuestions="answeredQuestions"
+      ></display-questions>
       <display-results
         v-if="this.answeredQuestions.length === 10"
         :answeredQuestions="answeredQuestions"
@@ -48,31 +40,39 @@
 </template>
 
 <script>
-import DisplayQuestionsVue from "./components/DisplayQuestions.vue";
-import DisplayResultsVue from "./components/DisplayResults.vue";
-import GetCategoryVue from "./components/GetCategory.vue";
-import GetDifficultyVue from "./components/GetDifficulty.vue";
-import GetNameVue from "./components/GetName.vue";
-import IndividualQuestionVue from "./components/IndividualQuestion.vue";
+import DisplayQuestionsVue from './components/DisplayQuestions.vue';
+import DisplayResultsVue from './components/DisplayResults.vue';
+import GenerateQuestionsVue from './components/GenerateQuestions.vue';
+import GetCategoryVue from './components/GetCategory.vue';
+import GetDifficultyVue from './components/GetDifficulty.vue';
+import GetNameVue from './components/GetName.vue';
+import IndividualQuestionVue from './components/IndividualQuestion.vue';
 
-import { eventBus } from "./main.js";
+import { eventBus } from './main.js';
 
 export default {
-  name: "app",
+  name: 'app',
   data() {
     return {
+      // selectedCategory: { name: '', id: '9' },
+      // selectedDifficulty: 'easy',
+      // questions: [],
+      // categories: [],
+      // difficulties: ['easy', 'medium', 'hard'],
+      // player: { name: 'Neale', score: 0 },
       selectedCategory: null,
       selectedDifficulty: null,
       questions: [],
       categories: [],
-      difficulties: ["easy", "medium", "hard"],
+      difficulties: ['easy', 'medium', 'hard'],
       player: { name: null },
       answeredQuestions: [],
+      currentQuestion: null,
     };
   },
   methods: {
     getCategories() {
-      let url = "https://opentdb.com/api_category.php";
+      let url = 'https://opentdb.com/api_category.php';
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -86,57 +86,75 @@ export default {
           return res.json();
         })
         .then((data) => {
-          this.questions = data.results;
+          this.questions = data.results.map((question, index) => {
+            question.questionNumber = index + 1;
+            return question;
+          });
         });
     },
   },
   mounted() {
     this.getCategories();
-    eventBus.$on("updated-player-name", (name) => {
+    eventBus.$on('updated-player-name', (name) => {
       this.player.name = name;
     });
-    eventBus.$on("updated-selected-difficulty", (difficulty) => {
+    eventBus.$on('updated-selected-difficulty', (difficulty) => {
       this.selectedDifficulty = difficulty;
     });
-    eventBus.$on("updated-selected-category", (category) => {
+    eventBus.$on('updated-selected-category', (category) => {
       this.selectedCategory = category;
     });
-    eventBus.$on("answered-question", (question) => {
+    eventBus.$on('answered-question', (question) => {
       this.answeredQuestions.push(question);
     });
-  },
-  computed: {
-    lastAnsweredQuestion() {
-      let lastAnsweredQuestion = 0;
-      if (this.answeredQuestions.length > 0) {
-        lastAnsweredQuestion = this.answeredQuestions[
-          this.answeredQuestions.length - 1
-        ].questionNumber;
+    eventBus.$on('send-generate-questions', () => {
+      this.currentQuestion = 1;
+      this.generateQuestions(this.selectedCategory, this.selectedDifficulty);
+    });
+    eventBus.$on('update-current-question', (update) => {
+      if (update === 'next') {
+        this.currentQuestion++;
+      } else {
+        this.currentQuestion--;
       }
-      return lastAnsweredQuestion;
-    },
+    });
   },
+  computed: {},
   components: {
-    "get-name": GetNameVue,
-    "get-category": GetCategoryVue,
-    "get-difficulty": GetDifficultyVue,
-    "display-questions": DisplayQuestionsVue,
-    "display-results": DisplayResultsVue,
-    "individual-question": IndividualQuestionVue,
+    'get-name': GetNameVue,
+    'get-category': GetCategoryVue,
+    'get-difficulty': GetDifficultyVue,
+    'display-questions': DisplayQuestionsVue,
+    'display-results': DisplayResultsVue,
+    'individual-question': IndividualQuestionVue,
+    'generate-questions': GenerateQuestionsVue,
   },
 };
 </script>
 
 <style>
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
 body {
-  font-family: "Itim", cursive;
+  font-family: 'Itim', cursive;
   background: rgb(199, 232, 243);
+  height: 100vh;
+}
+
+button {
+  width: 150px;
+  height: 30px;
+  border-radius: 25px;
 }
 #main-container {
   margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100%;
 }
 .input-box {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -148,9 +166,10 @@ body {
   flex-flow: column;
   align-items: center;
   justify-content: center;
-  min-width: 300px;
-  min-height: 300px;
+  width: 600px;
+  height: 300px;
 }
+
 .flex-form {
   display: flex;
   flex-flow: column;
