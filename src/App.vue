@@ -67,7 +67,7 @@ export default {
       difficulties: ['easy', 'medium', 'hard'],
       player: { name: null },
       answeredQuestions: [],
-      currentQuestion: null,
+      currentQuestion: 0,
     };
   },
   methods: {
@@ -105,7 +105,12 @@ export default {
       this.selectedCategory = category;
     });
     eventBus.$on('answered-question', (question) => {
-      this.answeredQuestions.push(question);
+      if (this.answeredQuestions.includes(question)) {
+        const index = this.answeredQuestions.indexOf(question);
+        this.answeredQuestions.splice(index, 1, question);
+      } else {
+        this.answeredQuestions.push(question);
+      }
     });
     eventBus.$on('send-generate-questions', () => {
       this.currentQuestion = 1;
@@ -117,6 +122,9 @@ export default {
       } else {
         this.currentQuestion--;
       }
+    });
+    eventBus.$on('skip-to-question', (questionNumber) => {
+      this.currentQuestion = questionNumber;
     });
   },
   computed: {},
@@ -147,7 +155,7 @@ body {
 button {
   width: 150px;
   height: 30px;
-  border-radius: 25px;
+  border-radius: 10px;
 }
 #main-container {
   margin-top: 50px;
